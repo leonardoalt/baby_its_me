@@ -1,0 +1,77 @@
+{
+  "inputs": [
+    {
+      "name": "sender",
+      "public": true,
+      "type": "struct",
+      "components": {
+        "name": "Point",
+        "generics": [],
+        "members": [
+          {
+            "name": "x",
+            "type": "field"
+          },
+          {
+            "name": "y",
+            "type": "field"
+          }
+        ]
+      }
+    },
+    {
+      "name": "msg",
+      "public": true,
+      "type": "field"
+    },
+    {
+      "name": "eth_addr_reveal",
+      "public": true,
+      "type": "field"
+    },
+    {
+      "name": "sig",
+      "public": false,
+      "type": "struct",
+      "components": {
+        "name": "Signature",
+        "generics": [],
+        "members": [
+          {
+            "name": "r",
+            "type": "struct",
+            "components": {
+              "name": "Point",
+              "generics": [],
+              "members": [
+                {
+                  "name": "x",
+                  "type": "field"
+                },
+                {
+                  "name": "y",
+                  "type": "field"
+                }
+              ]
+            }
+          },
+          {
+            "name": "s",
+            "type": "field"
+          }
+        ]
+      }
+    },
+    {
+      "name": "eth_addr",
+      "public": false,
+      "type": "field"
+    }
+  ],
+  "output": {
+    "type": "tuple",
+    "components": {
+      "elements": []
+    }
+  }
+}

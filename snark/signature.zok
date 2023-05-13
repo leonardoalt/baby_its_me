@@ -1,0 +1,60 @@
+import "ecc/edwardsAdd" as add;
+import "ecc/edwardsOnCurve" as onCurve;
+import "ecc/edwardsScalarMult" as scalarMult;
+from "ecc/babyjubjubParams" import BabyJubJubParams;
+
+import "hashes/poseidon/poseidon" as poseidon;
+
+import "utils/pack/bool/unpack256" as unpack256bool;
+
+from "./types" import Point, Signature;
+
+def orderCheck(Point p) -> bool {
+	return !(p.x == 0 && p.y == 1);
+}
+
+/// Verifies an EdDSA Signature.
+/// This is a modified version of the ZoKrates stdlib EdDSA that uses Poseidon.
+///
+/// Checks the correctness of a given EdDSA Signature (R,S) for the provided
+/// public key A and message M.
+/// This is based on the verification done in
+/// https://github.com/leonardoalt/babyjubjub-rs/blob/experiments/src/lib.rs#L395
+/// and customized here to use Poseidon instead of sha256 like in ZoKrates' stdlib.
+///
+/// Circuit accepts inputs if `sig` is a valid signature, panics otherwise.
+def main(public Point sender, public field msg, public field eth_addr_reveal, private Signature sig, private field eth_addr) {
+	assert(eth_addr_reveal == eth_addr);
+
+	BabyJubJubParams context = BabyJubJubParams {
+		// Order of the curve for reference: 21888242871839275222246405745257275088614511777268538073601725287587578984328
+		JUBJUB_C: 8, // Cofactor
+		JUBJUB_A: 168700, // Coefficient A
+		JUBJUB_D: 168696, // Coefficient D
+
+		// Montgomery parameters
+		MONT_A: 168698,
+		MONT_B: 1,
+
+		// Point at infinity
+		INFINITY: [0, 1],
+
+		// Base point of the large prime subgroup
+		Gu: 5299619240641551281634865583518297030282874472190772894086521144482721001553,
+		Gv: 16950150798460657717958625567821834550301663161624707787222815936182638968203
+	};
+	field[2] G = [context.Gu, context.Gv];
+
+	assert(onCurve([sig.r.x, sig.r.y], context));
+	assert(orderCheck(sig.r));
+
+	bool[256] k = unpack256bool(poseidon([sig.r.x, sig.r.y, sender.x, sender.y, msg]));
+
+	bool[256] sBits = unpack256bool(sig.s);
+	field[2] lhs = scalarMult(sBits, G, context);
+
+	field[2] kA = scalarMult(k, [sender.x, sender.y], context);
+	field[2] rhs = add([sig.r.x, sig.r.y], kA, context);
+
+	assert(lhs == rhs);
+}

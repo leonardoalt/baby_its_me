@@ -1,0 +1,11 @@
+struct Point {
+	field x;
+	field y;
+}
+
+/// r: Curve point
+/// s: Field element. Signature to be verified.
+struct Signature {
+	Point r;
+	field s;
+}
