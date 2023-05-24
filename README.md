@@ -33,13 +33,9 @@ The signature is private to the prover and will not be revealed by the proof.
 After cloning this repository, you should have the compiled circuit `out`, the
 proving key `proving.key`, and the verification key `verification.key` in the
 `snark` directory.
-You can compile the circuit yourself to see that it indeed corresponds to the
-circuit binary `out`:
 
-```bash
-$ cd snark && zokrates compile -i signature.zok -o test
-$ diff out test
-```
+The binary `out` and the keys are given for reproducibility, and you should not
+need to verify those.
 
 ### Testing your signature
 
@@ -130,11 +126,12 @@ $ make verifier
 
 You are **not** expected to have to analyze this file.
 
-The Foundry tests have a valid zero knowledge proof that works with
-`leoalt.eth` as the `msg.sender`.  If you want to test your proof, replace the
-values in the `proof` struct in `verifier/test/Verifier.t.sol:testProof` with
-the `a`, `b`, and `c` values from your `snark/proof.json`.  Note that you also
-need to replace `vm.prank(me)` with your own address.
+The Foundry tests have a zero knowledge proof that should not work, it is there
+just as a template that you can use to locally test your solution.  To test
+your proof, replace the values in the `proof` struct in
+`verifier/test/Verifier.t.sol:testProof` with the `a`, `b`, and `c` values from
+your `snark/proof.json`.  Note that you also need to replace `vm.prank(me)`
+with your own address.
 Now test your proof with
 
 ```bash
