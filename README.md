@@ -18,7 +18,7 @@ can submit your address as the solution in the Curta UI or contract.
 Clone this repo with `--recursive`.
 
 Requirements:
-- [ZoKrates 0.8.7](zokrates.github.io).
+- [ZoKrates 0.8.7](https://zokrates.github.io).
 - [Foundry](https://github.com/foundry-rs/foundry).
 
 ## Generating the zkSNARK
