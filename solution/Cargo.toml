@@ -1,0 +1,13 @@
+[package]
+name = "solution"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+babyjubjub-rs = { git = "https://github.com/leonardoalt/babyjubjub-rs", branch = "experiments" }
+num-bigint = {version = "0.4", features = ["rand"]}
+ff = {package="ff_ce" , version= "0.11", features = ["derive"]}
+rand_core = { version = "0.6", default-features = false }
+poseidon-rs = "0.0.8"
